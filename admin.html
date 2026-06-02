@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1B3A2F">
+<title>Athena Admin — Job Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F5F2EC;
+    color: #1A1A1A;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 18px 100px;
+    min-height: 100vh;
+  }
+  
+  .header {
+    background: #1B3A2F;
+    color: #F5F2EC;
+    padding: 18px;
+    margin: 0 -18px 24px;
+    border-bottom: 4px solid #B8956A;
+  }
+  
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  
+  .header .biz {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 28px 0 12px;
+    padding-left: 4px;
+  }
+  
+  .section-title:first-child {
+    margin-top: 0;
+  }
+  
+  .card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  
+  .form-row {
+    margin-bottom: 14px;
+  }
+  
+  .form-row label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    background: #FFF;
+    color: #1A1A1A;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  .form-row select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 40px;
+  }
+  
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: #1B3A2F;
+  }
+  
+  .form-row textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+  
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.05s;
+    text-align: center;
+    text-decoration: none;
+  }
+  
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  
+  .btn-primary { background: #1B3A2F; color: #F5F2EC; }
+  .btn-success { background: #2D6B47; color: #FFFFFF; }
+  .btn-tan { background: #B8956A; color: #FFFFFF; }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #1B3A2F;
+    color: #1B3A2F;
+  }
+  
+  .btn-stack > * + * { margin-top: 8px; }
+  
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #DDD;
+    border-top-color: #1B3A2F;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 10px;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .error {
+    background: #FFE0E0;
+    border-left: 4px solid #C0392B;
+    padding: 14px;
+    border-radius: 8px;
+    color: #8B1A1A;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  
+  .success-banner {
+    background: #E0F5E5;
+    border-left: 4px solid #2D6B47;
+    padding: 14px;
+    border-radius: 8px;
+    color: #1B5E2C;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .link-display {
+    background: #F5F2EC;
+    border: 1px dashed #B8956A;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    word-break: break-all;
+    color: #1B3A2F;
+    margin-bottom: 12px;
+  }
+  
+  .job-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  
+  .job-row-body {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .job-row-customer {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .job-row-meta {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .status-pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .status-pill.pending { background: #FFF4E0; color: #8B5A00; }
+  .status-pill.in-progress { background: #E0F0FF; color: #0A4D8C; }
+  .status-pill.complete { background: #E0F5E5; color: #1B5E2C; }
+  
+  .empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: #888;
+    font-size: 14px;
+  }
+  
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <h1>Job Tracker — Admin</h1>
+    <div class="biz">Athena Services Co.</div>
+  </div>
+  
+  <div id="error-screen" class="hidden">
+    <div class="error" id="error-message"></div>
+  </div>
+  
+  <!-- CREATE JOB FORM -->
+  <div id="create-screen">
+    <div class="section-title">Create a New Job</div>
+    <div class="card">
+      <div class="form-row">
+        <label for="subbie">Subcontractor</label>
+        <select id="subbie">
+          <option value="">Loading subbies...</option>
+        </select>
+      </div>
+      
+      <div class="form-row">
+        <label for="customer">Customer / Organisation</label>
+        <input id="customer" type="text" placeholder="e.g. Smith Apartments">
+      </div>
+      
+      <div class="form-row">
+        <label for="address">Site Address</label>
+        <input id="address" type="text" placeholder="e.g. 42 Wallaby Way, Brisbane QLD">
+      </div>
+      
+      <div class="form-row">
+        <label for="scope">Scope of Work</label>
+        <textarea id="scope" placeholder="e.g. Lawn mow, hedge trim front yard, blow paths"></textarea>
+      </div>
+      
+      <div class="form-row">
+        <label for="scheduled">Scheduled Date</label>
+        <input id="scheduled" type="date">
+      </div>
+      
+      <button id="btn-create" class="btn btn-primary">Create Job</button>
+    </div>
+  </div>
+  
+  <!-- SUCCESS SCREEN -->
+  <div id="success-screen" class="hidden">
+    <div class="section-title">Job Created</div>
+    <div class="card">
+      <div class="success-banner" id="success-banner">
+        Job created for John Smith — ready to send.
+      </div>
+      
+      <label style="font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Job Link</label>
+      <div class="link-display" id="link-display">https://...</div>
+      
+      <div class="btn-stack">
+        <button id="btn-copy" class="btn btn-primary">📋 Copy Link</button>
+        <a id="btn-sms" class="btn btn-tan" href="#">💬 Send via SMS</a>
+        <a id="btn-email" class="btn btn-tan" href="#">✉️ Send via Email</a>
+        <button id="btn-new" class="btn btn-outline">+ Create Another Job</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- RECENT JOBS -->
+  <div class="section-title">Recent Jobs</div>
+  <div id="recent-jobs">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>Loading jobs...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================================
+// CONFIG
+// =============================================================
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiH5afR0COjEElIWZt1lr5o1TEpQo0R5s0hF90Z2i9ipXfHcfzt-KZeQXC4pHn1wAFcA/exec';
+
+// =============================================================
+// STATE
+// =============================================================
+let subbies = [];
+let createdJob = null;
+
+// =============================================================
+// INIT
+// =============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  loadSubbies();
+  loadRecentJobs();
+  setDefaultScheduledDate();
+});
+
+function setDefaultScheduledDate() {
+  // Default scheduled date = tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('scheduled').value = tomorrow.toISOString().split('T')[0];
+}
+
+// =============================================================
+// LOAD SUBBIES
+// =============================================================
+async function loadSubbies() {
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=subbies`);
+    const data = await res.json();
+    
+    if (data.error) {
+      showError('Could not load subbies: ' + data.error);
+      return;
+    }
+    
+    subbies = data.subbies;
+    renderSubbieDropdown();
+  } catch (err) {
+    showError('Could not load subbies: ' + err.message);
+  }
+}
+
+function renderSubbieDropdown() {
+  const select = document.getElementById('subbie');
+  select.innerHTML = '<option value="">— Select a subbie —</option>';
+  subbies.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.name;
+    select.appendChild(opt);
+  });
+}
+
+// =============================================================
+// LOAD RECENT JOBS
+// =============================================================
+async function loadRecentJobs() {
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=recent&limit=20`);
+    const data = await res.json();
+    
+    if (data.error) {
+      document.getElementById('recent-jobs').innerHTML = `<div class="empty-state">Couldn't load: ${data.error}</div>`;
+      return;
+    }
+    
+    renderRecentJobs(data.jobs);
+  } catch (err) {
+    document.getElementById('recent-jobs').innerHTML = `<div class="empty-state">Couldn't load jobs.</div>`;
+  }
+}
+
+function renderRecentJobs(jobs) {
+  const container = document.getElementById('recent-jobs');
+  
+  if (!jobs || jobs.length === 0) {
+    container.innerHTML = `<div class="empty-state">No jobs yet. Create your first one above.</div>`;
+    return;
+  }
+  
+  container.innerHTML = '';
+  jobs.forEach(job => {
+    const statusClass = (job.status || 'pending').toLowerCase().replace(' ', '-');
+    const row = document.createElement('div');
+    row.className = 'job-row';
+    row.innerHTML = `
+      <div class="job-row-body">
+        <div class="job-row-customer">${escapeHtml(job.customerName || '—')}</div>
+        <div class="job-row-meta">${escapeHtml(job.subbieName || '—')} • ${escapeHtml(job.scheduledDate || '—')}</div>
+      </div>
+      <span class="status-pill ${statusClass}">${escapeHtml(job.status || 'Pending')}</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// =============================================================
+// CREATE JOB
+// =============================================================
+document.getElementById('btn-create').addEventListener('click', async () => {
+  const subbieId = document.getElementById('subbie').value;
+  const customer = document.getElementById('customer').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const scope = document.getElementById('scope').value.trim();
+  const scheduled = document.getElementById('scheduled').value;
+  
+  // Validate
+  if (!subbieId) return alert('Please select a subbie.');
+  if (!customer) return alert('Please enter a customer name.');
+  if (!address) return alert('Please enter a site address.');
+  if (!scope) return alert('Please enter a scope of work.');
+  if (!scheduled) return alert('Please pick a scheduled date.');
+  
+  const btn = document.getElementById('btn-create');
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+  
+  try {
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'createJob',
+        subbieId: subbieId,
+        customerName: customer,
+        siteAddress: address,
+        scopeOfWork: scope,
+        scheduledDate: scheduled
+      })
+    });
+    
+    const data = await res.json();
+    
+    if (data.error) {
+      btn.disabled = false;
+      btn.textContent = 'Create Job';
+      alert('Could not create job: ' + data.error);
+      return;
+    }
+    
+    createdJob = {
+      ...data,
+      customerName: customer,
+      siteAddress: address,
+      scopeOfWork: scope,
+      scheduledDate: scheduled
+    };
+    
+    showSuccessScreen();
+    loadRecentJobs(); // refresh list in background
+    
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Create Job';
+    alert('Something went wrong: ' + err.message);
+  }
+});
+
+// =============================================================
+// SUCCESS SCREEN
+// =============================================================
+function showSuccessScreen() {
+  document.getElementById('create-screen').classList.add('hidden');
+  document.getElementById('success-screen').classList.remove('hidden');
+  
+  document.getElementById('success-banner').textContent =
+    `Job created for ${createdJob.subbieName} — ready to send.`;
+  document.getElementById('link-display').textContent = createdJob.jobLink;
+  
+  // SMS link
+  const smsBody = `Hi ${createdJob.subbieName}, here's your next job from Athena Services. Tap the link to view details and tick off when you're done:\n\n${createdJob.jobLink}`;
+  document.getElementById('btn-sms').href = `sms:${formatPhoneForSms(createdJob.subbiePhone)}?body=${encodeURIComponent(smsBody)}`;
+  
+  // Email link
+  const emailSubject = `New Job — ${createdJob.customerName} — ${createdJob.scheduledDate}`;
+  const emailBody = `Hi ${createdJob.subbieName},\n\nHere's your next job from Athena Services. Tap the link below to view all details and mark it complete when you're done.\n\nCustomer: ${createdJob.customerName}\nSite: ${createdJob.siteAddress}\nScheduled: ${createdJob.scheduledDate}\nScope: ${createdJob.scopeOfWork}\n\nJob link:\n${createdJob.jobLink}\n\nCheers,\nLauren\nAthena Services Co.`;
+  document.getElementById('btn-email').href = `mailto:${createdJob.subbieEmail || ''}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+}
+
+function formatPhoneForSms(phone) {
+  if (!phone) return '';
+  // Strip spaces and formatting for SMS link
+  return String(phone).replace(/\s+/g, '');
+}
+
+// =============================================================
+// COPY LINK
+// =============================================================
+document.getElementById('btn-copy').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-copy');
+  
+  try {
+    await navigator.clipboard.writeText(createdJob.jobLink);
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Link'; }, 2000);
+  } catch (err) {
+    // Fallback for older browsers
+    const input = document.createElement('textarea');
+    input.value = createdJob.jobLink;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Link'; }, 2000);
+  }
+});
+
+// =============================================================
+// NEW JOB BUTTON
+// =============================================================
+document.getElementById('btn-new').addEventListener('click', () => {
+  // Reset form
+  document.getElementById('subbie').value = '';
+  document.getElementById('customer').value = '';
+  document.getElementById('address').value = '';
+  document.getElementById('scope').value = '';
+  setDefaultScheduledDate();
+  
+  // Re-enable create button
+  const createBtn = document.getElementById('btn-create');
+  createBtn.disabled = false;
+  createBtn.textContent = 'Create Job';
+  
+  // Switch screens
+  document.getElementById('success-screen').classList.add('hidden');
+  document.getElementById('create-screen').classList.remove('hidden');
+  
+  createdJob = null;
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// =============================================================
+// ERROR DISPLAY
+// =============================================================
+function showError(msg) {
+  document.getElementById('error-screen').classList.remove('hidden');
+  document.getElementById('error-message').textContent = msg;
+}
+</script>
+
+</body>
+</html>
