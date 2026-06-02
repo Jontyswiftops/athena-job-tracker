@@ -32,9 +32,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
   }
   
-  .header-text { min-width: 0; }
+  .header-text { min-width: 0; flex: 1; }
   
   .header h1 {
     font-size: 22px;
@@ -48,7 +49,13 @@
     margin-top: 4px;
   }
   
-  .logout-link {
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  
+  .header-link {
     background: transparent;
     border: 1px solid rgba(245, 242, 236, 0.3);
     color: #F5F2EC;
@@ -57,11 +64,11 @@
     border-radius: 6px;
     cursor: pointer;
     font-family: inherit;
-    flex-shrink: 0;
-    margin-left: 12px;
+    text-decoration: none;
+    display: inline-block;
   }
   
-  .logout-link:hover {
+  .header-link:hover {
     background: rgba(245, 242, 236, 0.1);
   }
   
@@ -576,7 +583,10 @@
       <h1>Job Tracker — Admin</h1>
       <div class="biz">Athena Services Co.</div>
     </div>
-    <button id="btn-logout" class="logout-link">Log out</button>
+    <div class="header-actions">
+      <a class="header-link" href="subbies.html">Subbies</a>
+      <button id="btn-logout" class="header-link">Log out</button>
+    </div>
   </div>
   
   <div id="error-screen" class="hidden">
@@ -899,7 +909,6 @@ function escapeHtml(str) {
 // JOB DETAIL VIEW
 // =============================================================
 async function openJobDetail(jobId) {
-  // Hide list, show detail loading
   document.getElementById('list-section').classList.add('hidden');
   document.getElementById('create-screen').classList.add('hidden');
   document.getElementById('success-screen').classList.add('hidden');
@@ -931,7 +940,6 @@ function renderJobDetail(job) {
   currentDetailPhotos = job.photos || [];
   const statusClass = (job.status || 'pending').toLowerCase().replace(' ', '-');
   
-  // Build photos section
   let photosHtml = '';
   if (currentDetailPhotos.length > 0) {
     photosHtml = `<div class="photo-grid">`;
@@ -1025,7 +1033,6 @@ function renderJobDetail(job) {
     `}
   `;
   
-  // Wire up the copy link button
   const copyBtn = document.getElementById('btn-detail-copy-link');
   if (copyBtn) {
     copyBtn.addEventListener('click', async () => {
@@ -1039,7 +1046,6 @@ function renderJobDetail(job) {
     });
   }
   
-  // Wire up photo clicks
   document.querySelectorAll('.photo-thumb[data-photo-idx]').forEach(el => {
     el.addEventListener('click', () => {
       const idx = parseInt(el.dataset.photoIdx);
@@ -1053,7 +1059,7 @@ document.getElementById('btn-detail-back').addEventListener('click', () => {
   document.getElementById('list-section').classList.remove('hidden');
   document.getElementById('create-screen').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  loadRecentJobs(); // refresh in case anything changed
+  loadRecentJobs();
 });
 
 // =============================================================
@@ -1075,13 +1081,11 @@ function updateModalImage() {
   if (!currentDetailPhotos[currentPhotoIndex]) return;
   
   const photo = currentDetailPhotos[currentPhotoIndex];
-  // Use a larger size for the modal view
   const largeUrl = photo.thumbnailUrl ? photo.thumbnailUrl.replace(/sz=w\d+/, 'sz=w1600') : '';
   document.getElementById('modal-img').src = largeUrl;
   
   document.getElementById('modal-counter').textContent = `${currentPhotoIndex + 1} / ${currentDetailPhotos.length}`;
   
-  // Enable/disable nav buttons
   document.getElementById('modal-prev').disabled = currentPhotoIndex === 0;
   document.getElementById('modal-next').disabled = currentPhotoIndex === currentDetailPhotos.length - 1;
 }
@@ -1092,7 +1096,6 @@ document.getElementById('modal-close').addEventListener('click', (e) => {
 });
 
 document.getElementById('photo-modal').addEventListener('click', (e) => {
-  // Close if clicking the backdrop (not the image or buttons)
   if (e.target.id === 'photo-modal') closePhotoModal();
 });
 
