@@ -227,6 +227,16 @@
     border-radius: 10px;
     margin-bottom: 8px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: transform 0.06s, box-shadow 0.12s;
+  }
+  
+  .job-row:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  
+  .job-row:active {
+    transform: scale(0.99);
   }
   
   .job-row-body {
@@ -250,6 +260,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  .job-row-chevron {
+    color: #B8956A;
+    font-size: 18px;
+    flex-shrink: 0;
   }
   
   .status-pill {
@@ -309,6 +325,216 @@
     color: #8B1A1A;
     margin-bottom: 12px;
     font-size: 13px;
+  }
+  
+  /* === DETAIL VIEW === */
+  .detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: #1B3A2F;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 0;
+    margin-bottom: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  
+  .detail-back:hover { opacity: 0.7; }
+  
+  .detail-header {
+    margin-bottom: 16px;
+  }
+  
+  .detail-customer {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1B3A2F;
+    margin-bottom: 6px;
+  }
+  
+  .detail-job-id {
+    font-size: 12px;
+    color: #888;
+    font-family: 'SF Mono', Menlo, monospace;
+  }
+  
+  .detail-field {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    border-bottom: 1px solid #EEE;
+  }
+  
+  .detail-field:last-child { border-bottom: none; }
+  
+  .detail-field-label {
+    font-size: 11px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .detail-field-value {
+    font-size: 15px;
+    color: #1A1A1A;
+    word-wrap: break-word;
+    line-height: 1.5;
+  }
+  
+  .detail-field-value.muted {
+    color: #999;
+    font-style: italic;
+  }
+  
+  .detail-timeline {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  
+  .timeline-item {
+    background: #F5F2EC;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .timeline-label {
+    font-size: 10px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .timeline-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1B3A2F;
+    line-height: 1.3;
+  }
+  
+  .timeline-value.empty { color: #BBB; font-weight: 400; }
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+    width: 100%;
+  }
+  
+  @media (min-width: 500px) {
+    .photo-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  
+  .photo-thumb {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #DDD;
+    cursor: pointer;
+  }
+  
+  .photo-thumb img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s;
+  }
+  
+  .photo-thumb:hover img {
+    transform: scale(1.04);
+  }
+  
+  .photo-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: #999;
+    font-size: 13px;
+    background: #FAF7F2;
+    border-radius: 8px;
+  }
+  
+  /* === PHOTO MODAL === */
+  .photo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+  }
+  
+  .photo-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+  
+  .photo-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #FFF;
+    font-size: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .photo-modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #FFF;
+    font-size: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .photo-modal-nav.prev { left: 16px; }
+  .photo-modal-nav.next { right: 16px; }
+  .photo-modal-nav:disabled { opacity: 0.25; cursor: default; }
+  
+  .photo-modal-counter {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #FFF;
+    font-size: 13px;
+    opacity: 0.7;
   }
   
   .hidden { display: none !important; }
@@ -412,14 +638,37 @@
     </div>
   </div>
   
-  <!-- RECENT JOBS -->
-  <div class="section-title">Recent Jobs</div>
-  <div id="recent-jobs">
-    <div class="loading">
-      <div class="spinner"></div>
-      <div>Loading jobs...</div>
+  <!-- RECENT JOBS LIST -->
+  <div id="list-section">
+    <div class="section-title">Recent Jobs</div>
+    <div id="recent-jobs">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div>Loading jobs...</div>
+      </div>
     </div>
   </div>
+  
+  <!-- JOB DETAIL VIEW -->
+  <div id="detail-screen" class="hidden">
+    <button class="detail-back" id="btn-detail-back">← Back to all jobs</button>
+    
+    <div id="detail-content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div>Loading job details...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO MODAL -->
+<div id="photo-modal" class="photo-modal hidden">
+  <button class="photo-modal-close" id="modal-close">×</button>
+  <button class="photo-modal-nav prev" id="modal-prev">‹</button>
+  <img id="modal-img" src="" alt="">
+  <button class="photo-modal-nav next" id="modal-next">›</button>
+  <div class="photo-modal-counter" id="modal-counter">1 / 1</div>
 </div>
 
 <script>
@@ -435,6 +684,8 @@ const STORAGE_KEY = 'athena_admin_pwd';
 let subbies = [];
 let createdJob = null;
 let adminPassword = null;
+let currentDetailPhotos = [];
+let currentPhotoIndex = 0;
 
 // =============================================================
 // AUTH
@@ -474,10 +725,6 @@ function showAppScreen() {
   document.getElementById('app-screen').classList.remove('hidden');
 }
 
-/**
- * Tests the supplied password by calling the subbies endpoint.
- * Returns true if accepted, false otherwise.
- */
 async function verifyPassword(pwd) {
   try {
     const res = await fetch(`${WEB_APP_URL}?action=subbies&pwd=${encodeURIComponent(pwd)}`);
@@ -537,7 +784,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   const stored = getStoredPassword();
   
   if (stored) {
-    // Try the stored password automatically
     const valid = await verifyPassword(stored);
     if (valid) {
       adminPassword = stored;
@@ -545,7 +791,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       initApp();
       return;
     } else {
-      // Stored password no longer works (was changed)
       clearStoredPassword();
     }
   }
@@ -560,7 +805,6 @@ function initApp() {
 }
 
 function setDefaultScheduledDate() {
-  // Default scheduled date = tomorrow
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   document.getElementById('scheduled').value = tomorrow.toISOString().split('T')[0];
@@ -635,7 +879,9 @@ function renderRecentJobs(jobs) {
         <div class="job-row-meta">${escapeHtml(job.subbieName || '—')} • ${escapeHtml(job.scheduledDate || '—')}</div>
       </div>
       <span class="status-pill ${statusClass}">${escapeHtml(job.status || 'Pending')}</span>
+      <span class="job-row-chevron">›</span>
     `;
+    row.addEventListener('click', () => openJobDetail(job.jobId));
     container.appendChild(row);
   });
 }
@@ -650,6 +896,236 @@ function escapeHtml(str) {
 }
 
 // =============================================================
+// JOB DETAIL VIEW
+// =============================================================
+async function openJobDetail(jobId) {
+  // Hide list, show detail loading
+  document.getElementById('list-section').classList.add('hidden');
+  document.getElementById('create-screen').classList.add('hidden');
+  document.getElementById('success-screen').classList.add('hidden');
+  document.getElementById('detail-screen').classList.remove('hidden');
+  document.getElementById('detail-content').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>Loading job details...</div>
+    </div>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=jobDetail&jobId=${encodeURIComponent(jobId)}&pwd=${encodeURIComponent(adminPassword)}`);
+    const data = await res.json();
+    
+    if (data.error) {
+      document.getElementById('detail-content').innerHTML = `<div class="error">Could not load: ${escapeHtml(data.error)}</div>`;
+      return;
+    }
+    
+    renderJobDetail(data.job);
+  } catch (err) {
+    document.getElementById('detail-content').innerHTML = `<div class="error">Network error: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderJobDetail(job) {
+  currentDetailPhotos = job.photos || [];
+  const statusClass = (job.status || 'pending').toLowerCase().replace(' ', '-');
+  
+  // Build photos section
+  let photosHtml = '';
+  if (currentDetailPhotos.length > 0) {
+    photosHtml = `<div class="photo-grid">`;
+    currentDetailPhotos.forEach((photo, idx) => {
+      photosHtml += `
+        <div class="photo-thumb" data-photo-idx="${idx}">
+          <img src="${escapeHtml(photo.thumbnailUrl)}" alt="${escapeHtml(photo.name)}" loading="lazy">
+        </div>
+      `;
+    });
+    photosHtml += `</div>`;
+  } else if (job.status === 'Complete' && job.photoCount > 0) {
+    photosHtml = `<div class="photo-empty">Photos uploaded but can't load preview. <a href="${escapeHtml(job.photoFolderUrl)}" target="_blank">Open Drive folder</a></div>`;
+  } else if (job.status === 'Complete') {
+    photosHtml = `<div class="photo-empty">No photos uploaded for this job.</div>`;
+  } else {
+    photosHtml = `<div class="photo-empty">Photos will appear here once the subbie marks the job complete.</div>`;
+  }
+  
+  const subbieNotesContent = job.subbieNotes && job.subbieNotes.trim() 
+    ? `<div class="detail-field-value">${escapeHtml(job.subbieNotes)}</div>`
+    : `<div class="detail-field-value muted">No notes yet.</div>`;
+  
+  const folderLinkHtml = job.photoFolderUrl
+    ? `<a class="btn btn-outline" href="${escapeHtml(job.photoFolderUrl)}" target="_blank">📁 Open Photo Folder in Drive</a>`
+    : '';
+  
+  document.getElementById('detail-content').innerHTML = `
+    <div class="card">
+      <div class="detail-header">
+        <span class="status-pill ${statusClass}" style="margin-bottom: 12px;">${escapeHtml(job.status || 'Pending')}</span>
+        <div class="detail-customer">${escapeHtml(job.customerName || '—')}</div>
+        <div class="detail-job-id">${escapeHtml(job.jobId)}</div>
+      </div>
+      
+      <div class="detail-timeline">
+        <div class="timeline-item">
+          <div class="timeline-label">Created</div>
+          <div class="timeline-value ${job.createdDate ? '' : 'empty'}">${escapeHtml(job.createdDate || 'N/A')}</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Started</div>
+          <div class="timeline-value ${job.startTime ? '' : 'empty'}">${escapeHtml(job.startTime || 'Not yet')}</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Completed</div>
+          <div class="timeline-value ${job.completionTime ? '' : 'empty'}">${escapeHtml(job.completionTime || 'Not yet')}</div>
+        </div>
+      </div>
+      
+      <div class="detail-field">
+        <div class="detail-field-label">Subcontractor</div>
+        <div class="detail-field-value">${escapeHtml(job.subbieName || '—')}${job.subbiePhone ? ' • ' + escapeHtml(job.subbiePhone) : ''}</div>
+      </div>
+      
+      <div class="detail-field">
+        <div class="detail-field-label">Site Address</div>
+        <div class="detail-field-value">${escapeHtml(job.siteAddress || '—')}</div>
+      </div>
+      
+      <div class="detail-field">
+        <div class="detail-field-label">Scheduled Date</div>
+        <div class="detail-field-value">${escapeHtml(job.scheduledDate || '—')}</div>
+      </div>
+      
+      <div class="detail-field">
+        <div class="detail-field-label">Scope of Work</div>
+        <div class="detail-field-value">${escapeHtml(job.scopeOfWork || '—')}</div>
+      </div>
+      
+      <div class="detail-field">
+        <div class="detail-field-label">Subbie Notes</div>
+        ${subbieNotesContent}
+      </div>
+    </div>
+    
+    <div class="section-title">Photos ${currentDetailPhotos.length > 0 ? `(${currentDetailPhotos.length})` : ''}</div>
+    <div class="card">
+      ${photosHtml}
+    </div>
+    
+    ${folderLinkHtml ? `
+      <div class="btn-stack" style="margin-top: 16px;">
+        ${folderLinkHtml}
+        <button class="btn btn-tan" id="btn-detail-copy-link">📋 Copy Job Link</button>
+      </div>
+    ` : `
+      <div class="btn-stack" style="margin-top: 16px;">
+        <button class="btn btn-tan" id="btn-detail-copy-link">📋 Copy Job Link</button>
+      </div>
+    `}
+  `;
+  
+  // Wire up the copy link button
+  const copyBtn = document.getElementById('btn-detail-copy-link');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(job.jobLink || '');
+        copyBtn.textContent = '✓ Copied!';
+        setTimeout(() => { copyBtn.textContent = '📋 Copy Job Link'; }, 2000);
+      } catch (err) {
+        alert('Link: ' + (job.jobLink || ''));
+      }
+    });
+  }
+  
+  // Wire up photo clicks
+  document.querySelectorAll('.photo-thumb[data-photo-idx]').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.photoIdx);
+      openPhotoModal(idx);
+    });
+  });
+}
+
+document.getElementById('btn-detail-back').addEventListener('click', () => {
+  document.getElementById('detail-screen').classList.add('hidden');
+  document.getElementById('list-section').classList.remove('hidden');
+  document.getElementById('create-screen').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  loadRecentJobs(); // refresh in case anything changed
+});
+
+// =============================================================
+// PHOTO MODAL
+// =============================================================
+function openPhotoModal(idx) {
+  currentPhotoIndex = idx;
+  updateModalImage();
+  document.getElementById('photo-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePhotoModal() {
+  document.getElementById('photo-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function updateModalImage() {
+  if (!currentDetailPhotos[currentPhotoIndex]) return;
+  
+  const photo = currentDetailPhotos[currentPhotoIndex];
+  // Use a larger size for the modal view
+  const largeUrl = photo.thumbnailUrl ? photo.thumbnailUrl.replace(/sz=w\d+/, 'sz=w1600') : '';
+  document.getElementById('modal-img').src = largeUrl;
+  
+  document.getElementById('modal-counter').textContent = `${currentPhotoIndex + 1} / ${currentDetailPhotos.length}`;
+  
+  // Enable/disable nav buttons
+  document.getElementById('modal-prev').disabled = currentPhotoIndex === 0;
+  document.getElementById('modal-next').disabled = currentPhotoIndex === currentDetailPhotos.length - 1;
+}
+
+document.getElementById('modal-close').addEventListener('click', (e) => {
+  e.stopPropagation();
+  closePhotoModal();
+});
+
+document.getElementById('photo-modal').addEventListener('click', (e) => {
+  // Close if clicking the backdrop (not the image or buttons)
+  if (e.target.id === 'photo-modal') closePhotoModal();
+});
+
+document.getElementById('modal-prev').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (currentPhotoIndex > 0) {
+    currentPhotoIndex--;
+    updateModalImage();
+  }
+});
+
+document.getElementById('modal-next').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (currentPhotoIndex < currentDetailPhotos.length - 1) {
+    currentPhotoIndex++;
+    updateModalImage();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('photo-modal').classList.contains('hidden')) return;
+  if (e.key === 'Escape') closePhotoModal();
+  if (e.key === 'ArrowLeft' && currentPhotoIndex > 0) {
+    currentPhotoIndex--;
+    updateModalImage();
+  }
+  if (e.key === 'ArrowRight' && currentPhotoIndex < currentDetailPhotos.length - 1) {
+    currentPhotoIndex++;
+    updateModalImage();
+  }
+});
+
+// =============================================================
 // CREATE JOB
 // =============================================================
 document.getElementById('btn-create').addEventListener('click', async () => {
@@ -659,7 +1135,6 @@ document.getElementById('btn-create').addEventListener('click', async () => {
   const scope = document.getElementById('scope').value.trim();
   const scheduled = document.getElementById('scheduled').value;
   
-  // Validate
   if (!subbieId) return alert('Please select a subbie.');
   if (!customer) return alert('Please enter a customer name.');
   if (!address) return alert('Please enter a site address.');
@@ -703,7 +1178,7 @@ document.getElementById('btn-create').addEventListener('click', async () => {
     };
     
     showSuccessScreen();
-    loadRecentJobs(); // refresh list in background
+    loadRecentJobs();
     
   } catch (err) {
     btn.disabled = false;
@@ -723,11 +1198,9 @@ function showSuccessScreen() {
     `Job created for ${createdJob.subbieName} — ready to send.`;
   document.getElementById('link-display').textContent = createdJob.jobLink;
   
-  // SMS link
   const smsBody = `Hi ${createdJob.subbieName}, here's your next job from Athena Services. Tap the link to view details and tick off when you're done:\n\n${createdJob.jobLink}`;
   document.getElementById('btn-sms').href = `sms:${formatPhoneForSms(createdJob.subbiePhone)}?body=${encodeURIComponent(smsBody)}`;
   
-  // Email link
   const emailSubject = `New Job — ${createdJob.customerName} — ${createdJob.scheduledDate}`;
   const emailBody = `Hi ${createdJob.subbieName},\n\nHere's your next job from Athena Services. Tap the link below to view all details and mark it complete when you're done.\n\nCustomer: ${createdJob.customerName}\nSite: ${createdJob.siteAddress}\nScheduled: ${createdJob.scheduledDate}\nScope: ${createdJob.scopeOfWork}\n\nJob link:\n${createdJob.jobLink}\n\nCheers,\nLauren\nAthena Services Co.`;
   document.getElementById('btn-email').href = `mailto:${createdJob.subbieEmail || ''}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
@@ -735,12 +1208,11 @@ function showSuccessScreen() {
 
 function formatPhoneForSms(phone) {
   if (!phone) return '';
-  // Strip spaces and formatting for SMS link
   return String(phone).replace(/\s+/g, '');
 }
 
 // =============================================================
-// COPY LINK
+// COPY LINK (success screen)
 // =============================================================
 document.getElementById('btn-copy').addEventListener('click', async () => {
   const btn = document.getElementById('btn-copy');
@@ -750,7 +1222,6 @@ document.getElementById('btn-copy').addEventListener('click', async () => {
     btn.textContent = '✓ Copied!';
     setTimeout(() => { btn.textContent = '📋 Copy Link'; }, 2000);
   } catch (err) {
-    // Fallback for older browsers
     const input = document.createElement('textarea');
     input.value = createdJob.jobLink;
     document.body.appendChild(input);
@@ -766,25 +1237,21 @@ document.getElementById('btn-copy').addEventListener('click', async () => {
 // NEW JOB BUTTON
 // =============================================================
 document.getElementById('btn-new').addEventListener('click', () => {
-  // Reset form
   document.getElementById('subbie').value = '';
   document.getElementById('customer').value = '';
   document.getElementById('address').value = '';
   document.getElementById('scope').value = '';
   setDefaultScheduledDate();
   
-  // Re-enable create button
   const createBtn = document.getElementById('btn-create');
   createBtn.disabled = false;
   createBtn.textContent = 'Create Job';
   
-  // Switch screens
   document.getElementById('success-screen').classList.add('hidden');
   document.getElementById('create-screen').classList.remove('hidden');
   
   createdJob = null;
   
-  // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
