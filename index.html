@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1B3A2F">
+<title>Athena Job Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F5F2EC;
+    color: #1A1A1A;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 20px 18px 100px;
+    min-height: 100vh;
+  }
+  
+  .header {
+    background: #1B3A2F;
+    color: #F5F2EC;
+    padding: 16px 18px;
+    margin: -20px -18px 20px;
+    border-bottom: 4px solid #B8956A;
+  }
+  
+  .header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  
+  .header .biz {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+  
+  .card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  
+  .status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  
+  .status-pill.pending { background: #FFF4E0; color: #8B5A00; }
+  .status-pill.in-progress { background: #E0F0FF; color: #0A4D8C; }
+  .status-pill.complete { background: #E0F5E5; color: #1B5E2C; }
+  
+  .job-id {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  
+  .customer {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1B3A2F;
+  }
+  
+  .field {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #EEE;
+  }
+  
+  .field-label {
+    font-size: 11px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  
+  .field-value {
+    font-size: 16px;
+    color: #1A1A1A;
+    word-wrap: break-word;
+  }
+  
+  .field-value.scope {
+    line-height: 1.6;
+  }
+  
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.05s;
+  }
+  
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  
+  .btn-primary {
+    background: #1B3A2F;
+    color: #F5F2EC;
+  }
+  
+  .btn-success {
+    background: #2D6B47;
+    color: #FFFFFF;
+  }
+  
+  .btn-secondary {
+    background: #B8956A;
+    color: #FFFFFF;
+    margin-top: 10px;
+  }
+  
+  .upload-area {
+    border: 2px dashed #B8956A;
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    background: #FAF7F2;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  
+  .upload-area input {
+    display: none;
+  }
+  
+  .upload-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+  
+  .upload-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .photo-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .photo-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #DDD;
+  }
+  
+  .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .photo-thumb .remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    resize: vertical;
+    background: #FFF;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #1B3A2F;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid #DDD;
+    border-top-color: #1B3A2F;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .error {
+    background: #FFE0E0;
+    border-left: 4px solid #C0392B;
+    padding: 16px;
+    border-radius: 8px;
+    color: #8B1A1A;
+    margin-bottom: 16px;
+  }
+  
+  .success-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .success-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  
+  .success-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1B3A2F;
+    margin-bottom: 8px;
+  }
+  
+  .success-msg {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <h1>Job Tracker</h1>
+    <div class="biz">Athena Services Co.</div>
+  </div>
+  
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <div>Loading job...</div>
+  </div>
+  
+  <div id="error-screen" class="hidden">
+    <div class="error" id="error-message"></div>
+  </div>
+  
+  <div id="job-screen" class="hidden">
+    <div class="card">
+      <div id="status-pill" class="status-pill pending">Pending</div>
+      <div class="job-id" id="job-id">JOB-XXX</div>
+      <div class="customer" id="customer-name">Customer Name</div>
+      
+      <div class="field">
+        <div class="field-label">Site Address</div>
+        <div class="field-value" id="site-address">—</div>
+      </div>
+      
+      <div class="field">
+        <div class="field-label">Scope of Work</div>
+        <div class="field-value scope" id="scope-of-work">—</div>
+      </div>
+      
+      <div class="field">
+        <div class="field-label">Scheduled Date</div>
+        <div class="field-value" id="scheduled-date">—</div>
+      </div>
+      
+      <div class="field hidden" id="start-time-field">
+        <div class="field-label">Started At</div>
+        <div class="field-value" id="start-time">—</div>
+      </div>
+    </div>
+    
+    <div id="action-pending" class="hidden">
+      <button class="btn btn-primary" id="btn-start">Start Job</button>
+    </div>
+    
+    <div id="action-in-progress" class="hidden">
+      <div class="card">
+        <div class="field-label" style="margin-bottom: 10px;">Upload Photos</div>
+        
+        <label for="photo-input" class="upload-area">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">Tap to add photos<br><span style="font-size: 12px; color: #999;">Multiple photos OK</span></div>
+          <input type="file" id="photo-input" accept="image/*" multiple capture="environment">
+        </label>
+        
+        <div id="photo-list" class="photo-list"></div>
+        
+        <div class="field-label" style="margin-top: 16px; margin-bottom: 8px;">Job Notes</div>
+        <textarea id="notes" placeholder="Anything Lauren needs to know about this job..."></textarea>
+      </div>
+      
+      <button class="btn btn-success" id="btn-complete">Mark Complete</button>
+    </div>
+  </div>
+  
+  <div id="success-screen" class="hidden success-screen">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Job Complete</div>
+    <div class="success-msg">Lauren has been notified.<br>You can close this page.</div>
+  </div>
+</div>
+
+<script>
+// =============================================================
+// CONFIG
+// =============================================================
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiH5afR0COjEElIWZt1lr5o1TEpQo0R5s0hF90Z2i9ipXfHcfzt-KZeQXC4pHn1wAFcA/exec';
+
+// =============================================================
+// STATE
+// =============================================================
+let currentJob = null;
+let selectedPhotos = []; // array of { name, base64, mimeType, dataUrl }
+
+// =============================================================
+// INIT
+// =============================================================
+window.addEventListener('DOMContentLoaded', loadJob);
+
+function getJobIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('job');
+}
+
+async function loadJob() {
+  const jobId = getJobIdFromUrl();
+  
+  if (!jobId) {
+    showError('No job ID in the URL. Please check the link Lauren sent you.');
+    return;
+  }
+  
+  try {
+    const response = await fetch(`${WEB_APP_URL}?job=${encodeURIComponent(jobId)}`);
+    const data = await response.json();
+    
+    if (data.error) {
+      showError(data.error);
+      return;
+    }
+    
+    currentJob = data.job;
+    renderJob(currentJob);
+    
+  } catch (err) {
+    showError('Could not load job. Check your internet connection and try again.\n\nError: ' + err.message);
+  }
+}
+
+// =============================================================
+// RENDERING
+// =============================================================
+function renderJob(job) {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('error-screen').classList.add('hidden');
+  document.getElementById('job-screen').classList.remove('hidden');
+  
+  document.getElementById('job-id').textContent = job.jobId;
+  document.getElementById('customer-name').textContent = job.customerName;
+  document.getElementById('site-address').textContent = job.siteAddress;
+  document.getElementById('scope-of-work').textContent = job.scopeOfWork;
+  document.getElementById('scheduled-date').textContent = job.scheduledDate;
+  
+  const pill = document.getElementById('status-pill');
+  pill.textContent = job.status;
+  pill.className = 'status-pill ' + job.status.toLowerCase().replace(' ', '-');
+  
+  // Show appropriate action based on status
+  document.getElementById('action-pending').classList.add('hidden');
+  document.getElementById('action-in-progress').classList.add('hidden');
+  
+  if (job.status === 'Pending') {
+    document.getElementById('action-pending').classList.remove('hidden');
+  } else if (job.status === 'In Progress') {
+    document.getElementById('action-in-progress').classList.remove('hidden');
+    if (job.startTime) {
+      document.getElementById('start-time-field').classList.remove('hidden');
+      document.getElementById('start-time').textContent = job.startTime;
+    }
+  } else if (job.status === 'Complete') {
+    showSuccessScreen();
+  }
+}
+
+function showError(msg) {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('job-screen').classList.add('hidden');
+  document.getElementById('error-screen').classList.remove('hidden');
+  document.getElementById('error-message').textContent = msg;
+}
+
+function showSuccessScreen() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('error-screen').classList.add('hidden');
+  document.getElementById('job-screen').classList.add('hidden');
+  document.getElementById('success-screen').classList.remove('hidden');
+}
+
+// =============================================================
+// START JOB
+// =============================================================
+document.getElementById('btn-start').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-start');
+  btn.disabled = true;
+  btn.textContent = 'Starting...';
+  
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight
+      body: JSON.stringify({
+        action: 'start',
+        jobId: currentJob.jobId
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      showError(data.error);
+      return;
+    }
+    
+    // Reload to show in-progress state
+    await loadJob();
+    
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Start Job';
+    alert('Could not start job. Try again.\n\n' + err.message);
+  }
+});
+
+// =============================================================
+// PHOTO UPLOAD
+// =============================================================
+document.getElementById('photo-input').addEventListener('change', async (e) => {
+  const files = Array.from(e.target.files);
+  
+  for (const file of files) {
+    try {
+      const compressed = await compressImage(file);
+      selectedPhotos.push(compressed);
+      renderPhotoList();
+    } catch (err) {
+      console.error('Photo processing failed', err);
+    }
+  }
+  
+  // Reset input so the same file can be selected again if needed
+  e.target.value = '';
+});
+
+async function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      const img = new Image();
+      
+      img.onload = () => {
+        // Compress to max 1600px on longest side, JPEG quality 0.85
+        const MAX_DIMENSION = 1600;
+        let { width, height } = img;
+        
+        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+          if (width > height) {
+            height = Math.round(height * (MAX_DIMENSION / width));
+            width = MAX_DIMENSION;
+          } else {
+            width = Math.round(width * (MAX_DIMENSION / height));
+            height = MAX_DIMENSION;
+          }
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const base64 = dataUrl.split(',')[1];
+        
+        resolve({
+          name: file.name,
+          base64: base64,
+          mimeType: 'image/jpeg',
+          dataUrl: dataUrl
+        });
+      };
+      
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPhotoList() {
+  const list = document.getElementById('photo-list');
+  list.innerHTML = '';
+  
+  selectedPhotos.forEach((photo, idx) => {
+    const div = document.createElement('div');
+    div.className = 'photo-thumb';
+    div.innerHTML = `
+      <img src="${photo.dataUrl}" alt="">
+      <div class="remove" data-idx="${idx}">×</div>
+    `;
+    list.appendChild(div);
+  });
+  
+  document.querySelectorAll('.photo-thumb .remove').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const idx = parseInt(e.target.dataset.idx);
+      selectedPhotos.splice(idx, 1);
+      renderPhotoList();
+    });
+  });
+}
+
+// =============================================================
+// MARK COMPLETE
+// =============================================================
+document.getElementById('btn-complete').addEventListener('click', async () => {
+  const notes = document.getElementById('notes').value.trim();
+  
+  if (selectedPhotos.length === 0) {
+    if (!confirm('No photos added. Are you sure you want to mark complete?')) {
+      return;
+    }
+  }
+  
+  const btn = document.getElementById('btn-complete');
+  btn.disabled = true;
+  btn.textContent = `Uploading ${selectedPhotos.length} photo${selectedPhotos.length === 1 ? '' : 's'}...`;
+  
+  try {
+    const photosPayload = selectedPhotos.map(p => ({
+      base64: p.base64,
+      mimeType: p.mimeType
+    }));
+    
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'complete',
+        jobId: currentJob.jobId,
+        notes: notes,
+        photos: photosPayload
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      btn.disabled = false;
+      btn.textContent = 'Mark Complete';
+      alert('Something went wrong:\n\n' + data.error);
+      return;
+    }
+    
+    showSuccessScreen();
+    
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Mark Complete';
+    alert('Upload failed. Check your connection and try again.\n\n' + err.message);
+  }
+});
+</script>
+
+</body>
+</html>
