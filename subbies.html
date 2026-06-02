@@ -700,7 +700,9 @@ function openEditSubbie(subbie) {
     document.getElementById('f-phone').value = subbie.phone || '';
     document.getElementById('f-email').value = subbie.email || '';
     document.getElementById('f-notes').value = subbie.notes || '';
-    document.getElementById('f-active').checked = subbie.active;
+    const activeCheckbox = document.getElementById('f-active');
+    activeCheckbox.checked = false; // reset first
+    activeCheckbox.checked = subbie.active === true; // then set
     
     // Show "Set Inactive" button only if currently active
     const deactivateBtn = document.getElementById('btn-deactivate');
@@ -716,7 +718,9 @@ function openEditSubbie(subbie) {
     document.getElementById('f-phone').value = '';
     document.getElementById('f-email').value = '';
     document.getElementById('f-notes').value = '';
-    document.getElementById('f-active').checked = true;
+    const activeCheckboxNew = document.getElementById('f-active');
+    activeCheckboxNew.checked = false;
+    activeCheckboxNew.checked = true;
     document.getElementById('btn-deactivate').classList.add('hidden');
   }
   
